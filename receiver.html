@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pertanyaan Masuk - NGL Lite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #0066ff;
+            font-size: 2.5em;
+        }
+
+        .questions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .question {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-left: 4px solid #0066ff;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Pertanyaan Masuk</h1>
+            <p>Total pertanyaan: <span id="questionCount">0</span></p>
+        </div>
+
+        <div class="questions" id="questionsContainer">
+            <!-- Pertanyaan akan muncul di sini -->
+        </div>
+    </div>
+
+    <script>
+        function loadQuestions() {
+            const questions = JSON.parse(localStorage.getItem('questions') || '[]');
+            const container = document.getElementById('questionsContainer');
+            const countElement = document.getElementById('questionCount');
+            
+            container.innerHTML = '';
+            countElement.textContent = questions.length;
+            
+            questions.reverse().forEach(question => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    ${question.text}
+                    <div class="timestamp">
+                        Diterima: ${new Date(question.timestamp).toLocaleString()}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        // Muat pertanyaan pertama kali
+        loadQuestions();
+        
+        // Perbarui setiap 2 detik
+        setInterval(loadQuestions, 2000);
+    </script>
+</body>
+</html
